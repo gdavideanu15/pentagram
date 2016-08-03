@@ -13,7 +13,7 @@ class Photo(models.Model):
     user = models.ForeignKey(User)
     photo = models.ImageField()
 
-class Comments(models.Model):
+class Comment(models.Model):
     photo_id = models.ForeignKey(Photo)
     user_id = models.ForeignKey(User)
     comment = models.CharField(max_length=500)
@@ -21,7 +21,7 @@ class Comments(models.Model):
 def photo_directory(instance, filename):
     return 'photos/use_{0}/{1}_{2}'.format(instance.user.username, str(uuid1()), filename)
 
-class Likes(models.Model):
+class Like(models.Model):
     user_id = models.ForeignKey(User)
     photo_id = models.ForeignKey(Photo)
 

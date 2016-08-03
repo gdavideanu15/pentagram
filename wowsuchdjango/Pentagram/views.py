@@ -1,17 +1,21 @@
 from django.shortcuts import render
 
-# Create your views here.
+from django.contrib.auth.models import User
 from django.shortcuts import render
-
-
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
 from rest_framework import status
-from Pentagram.models import Photo
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
 
-# Create your views here.
-from Pentagram.serializers import PhotoSerializer, UserSerializer
+from pentagram.models import Photo
+from pentagram.models import Comment
+from pentagram.models import Like
+from pentagram.serializers import UserSerializer
+from pentagram.serializers import PhotoSerializer
+from pentagram.serializers import CommentSerializer
 from rest_framework.permissions import AllowAny
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+
 
 @api_view(['GET', 'POST'])
 def photos(request):
@@ -52,3 +56,9 @@ def comments(request, id_photo):
 @api_view(['GET','POST'])
 def comments(request, id_photo):
     pass
+
+class CustomObtainAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
+        token = Token.objects.get(key=response.data['token'])
+        return Response({'token': token.key, 'id': token.user_id})

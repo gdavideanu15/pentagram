@@ -13,16 +13,19 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf import settings
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include
 from django.contrib import admin
+from django.conf.urls import url
+from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import TemplateView
+from pentagram.views import comments,likes,CustomObtainAuthToken
 from rest_framework.authtoken import views as authtoken_views
 
+
 urlpatterns = [
-    url(r'^api/v1/login/$', authtoken_views.obtain_auth_token),
+    url(r'^api/v1/login/$', CustomObtainAuthToken.as_view()),
     url(r'^api/v1/users/$', 'Pentagram.views.users', name='users'),
     url(r'^api/v1/photos/$', 'Pentagram.views.photos', name='photos'),
     url(r'^api/v1/photos/(?P<id_photo>[0-9]*)/comments/$', 'Pentagram.views.comments', name='comments'),
